@@ -28,10 +28,10 @@ For any issues with PYNQ, you can consult the following resources:
 If your PYNQ board refuses to connect, try the following:
 1. Check whether your ethernet cable to securely connected to the board - there should be lights on the board which indicate ethernet connection. Some of the PYNQ kits have old ethernet cables with loose ends. Try using a different cable.
 2. Check your network settings. If you assigned a static IP address, ensure that the IP address is correct.
-3. SSH into the board using PuTTY. Run `ifconfig` to check that its `eth0:1` IP address is what you expected (usually `192.168.2.99`). If it is not, try running your the indicated IP address with port 9090.
-4. If you are still unable to connect, try restarting your PYNQ board, which usually does the trick. Serial into the board using PuTTY and run `sudo reboot`. If you are unsure as to how to set up PuTTY, refer to the [PuTTY section](#setting-up-putty) of this file.
+3. Get a terminal on the board. (if you are unsure how, refer to the [section on getting a terminal](#getting-a-terminal)). Run `ifconfig` to check that its `eth0:1` IP address is what you expected (usually `192.168.2.99`). If it is not, try running your the indicated IP address with port 9090.
+4. If you are still unable to connect, try restarting your PYNQ board, which usually does the trick. Get a terminal and run `sudo reboot`, or unplug and replug power from the board
 
-> If you are unable to even serial into the board, then you might have flashed the wrong image - make sure you are flashing the SD card with the PYNQ Z1 image, not the Z2 image.
+> If you are unable to even get a terminal on the board, then you might have flashed the wrong image - make sure you are flashing the SD card with the PYNQ Z1 image, not the Z2 image.
 
 ### Limited storage space
 Vivado and Vitis are huge programs, and they require a lot of space to install. You can usually see the expected space required in the installation setup tool. Note that the space required for extraction and download is larger than the final installation size.
@@ -59,11 +59,22 @@ For any issues with PYNQ, you can consult the following resources:
 - [PYNQ forum](https://discuss.pynq.io/)
 - [PYNQ YouTube tutorials](https://youtube.com/playlist?list=PLjVZA8Z_co6KBmqzyHfzKnJ8LmYd7cU03&si=lTCQ5iMN9KToyjBG)
 
-### Setting up PuTTY
+### Getting a terminal
 
-Your laptop must be connected to the PYNQ board via serial (i.e. MicroUSB).
+#### SSH
 
-In the "Serial" category, configure the following settings:
+__Windows__
+The easiest way to SSH on Windows is via the terminal emulator PuTTY, which you can download from the following link: https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html. Configure it to use SSH, with username `xilinx`, hostname `192.168.2.99`, and password `xilinx`.
+
+__Linux__
+From a terminal emulator on your computer, type `ssh xilinx@192.168.2.99`. The password is `xilinx`.
+
+#### Serial console
+
+If SSH isn't working, you can also try getting a serial console on the PYNQ board. Your computer must be connected to the board via MicroUSB.
+
+__Windows__
+In the "Serial" category of PuTTY, configure the following settings:
 - Serial line: `COM4` (different for every user, for Windows users check Device Manager and see which COM port your PYNQ board is connected to)
 - Speed (baud rate): `115200`
 - Data bits: `8`
@@ -78,3 +89,8 @@ After configuring the serial settings, go to the "Session" category and save the
 ![PuTTY Configuration](images/putty-config.png)
 
 Finally, click "Open" to establish a connection to the PYNQ board.
+
+__Linux__
+There are many serial console clients. A simple one is `minicom`, which can be used to connect to the PYNQ board by running `minicom /dev/ttyUSB0` from a terminal emulator on your computer. You may need to either run this with `sudo` or add yourself to the appropriate group (e.g. `uucp` on Arch Linux or `dialout` on Debian/Ubuntu) to have permission to access serial device nodes.
+
+If your board is not at `/dev/ttyUSB0`, consult `sudo dmesg | grep tty`, and look for something like `FTDI USB Serial Device converter now attached to ttyUSB1` to find the device node.
