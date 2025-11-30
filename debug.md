@@ -91,6 +91,6 @@ After configuring the serial settings, go to the "Session" category and save the
 Finally, click "Open" to establish a connection to the PYNQ board.
 
 __Linux__
-There are many serial console clients. A simple one is `minicom`, which can be used to connect to the PYNQ board by running `minicom /dev/ttyUSB0` from a terminal emulator on your computer. You may need to either run this with `sudo` or add yourself to the appropriate group (e.g. `uucp` on Arch Linux or `dialout` on Debian/Ubuntu) to have permission to access serial device nodes.
+There are many serial console clients. A simple one is `minicom`, which can be used to connect to the PYNQ board by running `minicom -D /dev/ttyUSB0` from a terminal emulator on your computer. You may need to either run this with `sudo` or add yourself to the appropriate group (e.g. `uucp` on Arch Linux or `dialout` on Debian/Ubuntu) to have permission to access serial device nodes.
 
 If your board is not at `/dev/ttyUSB0`, consult `sudo dmesg | grep tty`, and look for something like `FTDI USB Serial Device converter now attached to ttyUSB1` to find the device node.
