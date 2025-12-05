@@ -6,13 +6,16 @@
 
 To get started with the labs, we will first setup the required toolchain - this might be a bit troublesome, so please take advantage of the debugging notes `debug.md`.
 
-In this lab, we will use the PYNQ-Z1 board. The lab was built on Windows 10, using PYNQ release version v2.7 and Xilinx Tool Version 2020.2. Feel free to use a more recent release version, but avoid using any release version before PYNQ v2.7.
+In this lab, we will use the PYNQ-Z1 board.
+> The lab was built on Windows 10, using PYNQ release version v2.7 and Xilinx Tool Version 2020.2. Feel free to use a more recent release version, but avoid using any release version before PYNQ v2.7.
+>
+> @Cheng: The lab was tested on Windows 11, using PYNQ release version v3.1 and Xilinx Tool Version 2024.1.
 
 Note: Vivado's projects and tcl scripts are forward compatible, but not backwards compatible.
 
-![](/images/versions.png)
+![versions](/images/versions.png)
 
-> Source: https://pynq.readthedocs.io/en/latest/pynq_sd_card.html
+> Source: <https://pynq.readthedocs.io/en/latest/pynq_sd_card.html>
 
 The latest available version is v3.1, which corresponds to Xilinx 2024.1.
 
@@ -34,6 +37,8 @@ Download the [Pynq SD Card Image](https://www.pynq.io/boards.html) onto the Py
 
 ### Step 3: Setting up the board
 
+> 📝 Please Watch video [Setting up your PYNQ-Z1 board](https://www.youtube.com/watch?v=SuXkbcK3w9E) before proceeding.
+
 Once you have flashed the PYNQ image onto your SD card, insert it into the PYNQ-Z1 board and connect the power supply. The board should be powered by either a micro-USB cable or a 5V power supply. Remember to switch the pin on the board to either use the USB or power supply.
 
 ![Power options on PYNQ Z1 board](../images/power_options_on_pynq_z1.jpg)
@@ -42,7 +47,7 @@ Let us now look into how the board works. The most important component is the Zy
 
 ![Zynq-7000 SoC Block Diagram](../images/Zynq-7000SBlockDiagram.jpg)
 
-> Source: https://www.mouser.co.uk/new/xilinx/xilinx-zynq-7000-socs/
+> Source: <https://www.mouser.co.uk/new/xilinx/xilinx-zynq-7000-socs/>
 
 On top of this, the PYNQ framework provides a full Ubuntu-based Linux distribution on the SD card, with Linux drivers for the interfaces between the PS and PL, wrapped in Python libraries which makes the design easier. The following excerpt from Xilinx's introduction to PYNQ gives an excellent visual representation of the overall systems you will be working with:
 
@@ -51,7 +56,7 @@ On top of this, the PYNQ framework provides a full Ubuntu-based Linux distributi
 | ![PYNQ Workshop Slide 10](../images/pynq-workshop-slide-10.png) |
 | ![PYNQ Workshop Slide 12](../images/pynq-workshop-slide-12.png) |
 
-> Source: https://github.com/Xilinx/PYNQ_Workshop/blob/master/01_PYNQ_Workshop_introduction.pdf
+> Source: <https://github.com/Xilinx/PYNQ_Workshop/blob/master/01_PYNQ_Workshop_introduction.pdf>
 
 ### Step 4: Connecting to Jupyter Notebook
 
@@ -59,15 +64,15 @@ By default, PYNQ uses a web interface to interact with the FPGA board. We will n
 
 > Note: if you connect Ethernet directly to your computer, PYNQ will not have access to the internet unless you bridge your computers internet connection. This means you will not be able to update system packages.
 
-#### Assigning a Static IP:
+#### Assigning a Static IP
 
 PYNQ by default uses a static IP address of `192.168.2.99`. You should configure your laptop to also have an IP address **on the same subnet as the PYNQ-Z1 board** (i.e. `192.168.2.X`) to be able to access the Jupyter Notebook server.
 
-__Windows__
+**Windows**
 Open up the `Network and Sharing Center`, and click on the `Ethernet connection`. Click on `Properties`, and then double-click on `Internet Protocol Version 4 (TCP/IPv4)`. Assign the following IP address: `192.168.2.X` where X is any number between 0 and 255, other than 99.
 
-__Linux__
-See the PYNQ documentation: https://pynq.readthedocs.io/en/latest/appendix/assign_a_static_ip.html#assign-a-static-ip-address
+**Linux**
+See the PYNQ documentation: <https://pynq.readthedocs.io/en/latest/appendix/assign_a_static_ip.html#assign-a-static-ip-address>
 
 #### Open Notebook in browser
 
@@ -99,8 +104,10 @@ Now we are ready to get started. Open up Vivado and create a new project.
 4. Press Next.
 5. Select RTL Project, for now: "do not specify the sources".
 6. Press Next.
-7. Select the PYNQ-Z1 board (you may need to install board files in Vivado, see below.) Double click on the part number to select it and move onto the summary.
-> If you are unable to find PYNQ-Z1, go to `Parts` instead of `Boards`, and select `xc7z020clg400-1` part.
+7. Select the PYNQ-Z1 board. Double click on the part number to select it and move onto the summary.
+
+    > 📝 If you are unable to find PYNQ-Z1, go to `Parts` instead of `Boards`, and select `xc7z020clg400-1` part.
+
 8. Press Finish.
 
 ![Vivado Start Page](/images/starting_page.png)
@@ -118,6 +125,7 @@ Now we are ready to get started. Open up Vivado and create a new project.
 On the column on the left hand side, click `Create Block Design`. You can leave the block design name as `design_1` for now.
 
 ![Create Block Design](/images/create_block_design.png)
+![Block Design](/images/lab1-block-design.png)
 
 Add the Zynq7 processing system - this contains the interfaces to the dual ARM cores on the FPGA. Double click on the Zynq7 PS block. Inside the Zynq7 PS IP settings, there is a part which notes how many HP slave ports are needed (only one needed in this case, HP0).
 
@@ -134,6 +142,7 @@ Add the FIR filter: Vivado provides a wizard called the `FIR Compiler` which hel
 ![Add FIR Compiler Block](/images/fir_compiler.png)
 
 Create the FIR filter by specifying the coefficients. Double click on the FIR Compiler block to customise the IP, and paste in the following coefficients:
+
 ```
 -255, -260, -312, -288, -144, 153, 616, 1233, 1963, 2739, 3474, 4081, 4481, 4620, 4481, 4081, 3474, 2739, 1963, 1233, 616, 153, -144, -288, -312, -260, -255
 ```
@@ -165,9 +174,15 @@ Next, Run Block Automation.
 
 Also, Run Connection Automation - Vivado intelligently maps input ports and output ports together. Select all the ports in the tree view.
 
+![Connection Automation](/images/lab1-run-connection-automation-1.png)
+
+Press F6 to validate your design. You will see incomplete address path warnings. Run Connection Automation again.
+
 ![Connection Automation](/images/connection_automation.png)
 
 Rename the `FIR Compiler` block to `fir`, and the `AXI DMA` block to `fir_dma`. This will make it cleaner to access in the Jupyter Notebook when we are utilising these accelerators.
+
+![Rename block](/images/lab1-rename-block.png)
 
 You should have a design that looks something like this:
 
@@ -179,14 +194,17 @@ Now that the design is completed, click `F6` to validate your design. If validat
 
 ![](/images/hdl_wrapper.jpg)
 
+![](/images/lab1-export-hdl-wrapper.png)
+
 > Synthesis translates your HDL code into a gate-level netlist of logical components (LUTs, flip-flops, DSPs, etc.) that can be implemented on the FPGA fabric. Implementation then places those components onto physical FPGA resources and routes the connections between them, while bitstream generation creates the binary configuration file that programs the FPGA.
 
 Now to run your design on the PYNQ board, we need three files: a `tcl` file, a `hwh` files, and a `bit` file.
 
 To obtain the three files:
+
 - For `.tcl`: File > Export > Export Block Design
 - For `.hwh`: `lab1/lab1.gen/sources_1/bd/design_1/hw_handoff/design_1.hwh`
-- For `.bit`: `lab1/lab1.runs/impl_1/design_1_wrapper.bit`. Rename the file to `design1.bit`
+- For `.bit`: `lab1/lab1.runs/impl_1/design_1_wrapper.bit`. Rename the file to `design_1.bit`
 
 Replace "lab1" with whatever you named your project.
 
@@ -196,9 +214,9 @@ Once you have obtained the files, connect your laptop to the PYNQ board.
 
 On your laptop browser, type in: `192.168.2.99`. When prompted with a password, enter "xilinx".
 
-Create a new folder and upload your three files onto it, along with the provided Jupyter Notebook `jupyter_notebook/fir`.
+Create a new folder (e.g., `InfoProc-lab1`) and upload your three files onto it, along with the provided Jupyter Notebook `jupyter_notebook/fir`.
 
-![](/images/jupyter.jpg)
+![jupyter](/images/jupyter.jpg)
 
 Click open the Jupyter Notebook. Run the cells and follow the instructions on the notebook, and observe the speed of the hardware IP for FIR filters compared to the software functions.
 
@@ -207,6 +225,7 @@ Click open the Jupyter Notebook. Run the cells and follow the instructions on th
 Here we attempt a simple array merging procedure. The purpose is to get a better understanding of how MMIO (memory-mapped IO) works and how to do simple register control.
 
 Let's start off by creating a block design which allows us to do the operation below, but in hardware:
+
 ```
 [1,3,5] + [2,4,6] => [1,2,3,4,5,6]
 ```
@@ -253,7 +272,7 @@ Let's first modify this `merge_array_v1_0_S00_AXI` Verilog file.
 After the existing signal declarations (after `reg aw_en;`), add:
 
 ```systemverilog
-reg	 aw_en;
+reg  aw_en;
 
 // Add these new signals:
 wire fsmStart;
@@ -266,13 +285,14 @@ wire [31:0] mergedFifoRdData;
 After the I/O connection assignments (after `assign S_AXI_RVALID = axi_rvalid;`), add:
 
 ```systemverilog
-assign S_AXI_RVALID	= axi_rvalid;
+assign S_AXI_RVALID = axi_rvalid;
 
 // Add this:
 assign fsmStart = slv_reg0[0];
 ```
 
 Find the large `always` block:
+
 ```systemverilog
 always @( posedge S_AXI_ACLK )
 begin
@@ -504,9 +524,11 @@ The `merge_driver` folder contains several files that you will need to place in 
 The screenshot above shows the drivers placement relative to the path `/home/xilinx/pynq/lib` on your PYNQ board. For clearer reference:
 
 Under /home/xilinx/pynq/lib:
+
 - merge.py
 
 Under /home/xilinx/pynq/lib/_pynq/_merge:
+
 - merge_driver.cpp
 - merge_driver.h
 - Makefile
@@ -514,14 +536,19 @@ Under /home/xilinx/pynq/lib/_pynq/_merge:
 To build `libmerge.so` from the C++ source files (`merge_driver.cpp` and `merge_driver.h`):
 
 1. Navigate to the directory containing the Makefile: `/home/xilinx/pynq/lib/_pynq/_merge`
+
 ```
 cd /home/xilinx/pynq/lib/_pynq/_merge
 ```
+
 2. Run the `make` command, which will compile the C++ code and create the shared library
+
 ```
 make
 ```
+
 3. Copy `libmerge.so` from the `/home/xilinx/pynq/lib/_merge/` directory to the `/home/xilinx/pynq/lib/` directory
+
 ```
 cp libmerge.so ../
 ```
@@ -539,9 +566,11 @@ First, we look at the C++ driver layer that interacts with the AXI4 peripheral t
 The header file (`merge_driver.h`) defines memory-mapped register offsets for your merge IP core. You will observe them being called by `BaseAddr + SOME_REG_OFFSET` in the C++ driver file.
 
 The C++ driver file (`merge_driver.cpp`) contains `merge_read()` and `merge_write()` functions which perform memory access to the hardware registers using volatile pointers:
+
 ```
 *(volatile uint32_t *)addr = data;
 ```
+
 The `volatile` keyword prevents compiler optimization, ensuring every read/write actually accesses the hardware registers.​
 
 Looking at the `merge` function:
@@ -559,14 +588,17 @@ Q1: How can we control these C++ functions?
 Notice the use of `cffi` in Python? This stands for "C Foreign Function Interface", an [interface in Python used for calling C code](https://pypi.org/project/cffi/).
 
 The Python driver uses CFFI to load and call the compiled C++ library:
+
 ```
 self._libmerge = self._ffi.dlopen(os.path.join(LIB_SEARCH_PATH, "libmerge.so"))
 ```
+
 CFFI provides a clean way to transfer data between Python and C/C++, handling type conversions automatically.
 
 Usually, embedded developers simply interface with the hardware by directly writing C drivers - PYNQ was created to lower the boundary of FPGA embedded development by pre-writing most drivers and wrapping them in C++.
 
 The `cdef()` calls declare the C function signatures so CFFI knows how to call them:
+
 ```
 self._ffi.cdef("void merge(unsigned int BaseAddr, ...);")
 ```
