@@ -9,15 +9,13 @@ To get started with the labs, we will first setup the required toolchain - this 
 In this lab, we will use the PYNQ-Z1 board.
 > The lab was built on Windows 10, using PYNQ release version v2.7 and Xilinx Tool Version 2020.2. Feel free to use a more recent release version, but avoid using any release version before PYNQ v2.7.
 >
-> @Cheng: The lab was tested on Windows 11, using PYNQ release version v3.1 and Xilinx Tool Version 2024.1.
+> @Cheng: The lab was tested on Windows 11, using PYNQ release version v3.1 and Xilinx Tool Version 2022.2.
 
 Note: Vivado's projects and tcl scripts are forward compatible, but not backwards compatible.
 
 ![versions](/images/versions.png)
 
 > Source: <https://pynq.readthedocs.io/en/latest/pynq_sd_card.html>
-
-The latest available version is v3.1, which corresponds to Xilinx 2024.1.
 
 If you encounter any issues, please first refer to the debugging notes `debug.md`, before approaching the TAs or the module leader.
 
@@ -265,6 +263,7 @@ Lastly, we create the peripheral with options "Edit IP". This will prompt Vivado
 I'll guide you through transforming the first template into the second one step by step.
 
 Initially, we see the following:
+
 ![](/images/edit_merge_ip.jpg)
 
 Let's first modify this `merge_array_v1_0_S00_AXI` Verilog file.
@@ -464,7 +463,7 @@ Remember that we instantiated in the user logic section a module named `mergeCor
 
 We first add sources by clicking the "+" in the `Sources` section. Select "Add or create design sources" when prompted, and then select "Create File". Make it a Verilog file, with the name `mergeCore`.
 
-Click and open `mergeCore.v`. You will find under the `hw_files` folder a completed file for you. Feel free to challenge yourself and write it yourself, or modify the logic to do something else other than merging two arrays later on after completing this tutorial.
+Click and open [`mergeCore.v`](/hw_files/mergeCore.v). You will find under the `hw_files` folder a completed file for you. Feel free to challenge yourself and write it yourself, or modify the logic to do something else other than merging two arrays later on after completing this tutorial.
 
 ![](/images/mergecore.jpg)
 
@@ -484,18 +483,23 @@ The only changes required is in the "Native Ports" tab.
 
 ![](/images/fifo_gen_config.jpg)
 
+![array-fifo](/images/lab1-array-fifo.png)
+
 > Select "1024" instead of "2048" for write/read depth of arrayFifo1 and arrayFifo2, but leave it at "2048" for mergedFifo.
 > Pay attention to the naming - it must match the module name which you used in the `mergeCore` code. For example, the picture shows the instantiation for `mergedFifo`, but you should instantiate another FIFO Generator for `arrayFifo`, which will be used by both `arrayFifo1` and `arrayFifo2`.
 
 After completion, click on `Edit Packaged IP`. Keep a record of the Identification tab of the IP:
 
-![](/images/pkg_ip.jpg)
+![](/images/lab1-edit-pkg.png)
+
+[](/images/pkg_ip.jpg)
 
 Now return to the original `merge_array` Vivado project.
 
-In the block design, add the `merge_array_v1_0_v1_0` IP.
+In the block design, add the `merge_array_v1.0` IP.
 
-![](/images/merge_array_bd.jpg)
+![](/images/lab1-add-merge-array-v1.0.png)
+[](/images/merge_array_bd.jpg)
 
 Run connection automation, then right click on `design_1` (with the orange square on the left) and "create HDL wrapper".
 
