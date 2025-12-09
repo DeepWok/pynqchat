@@ -7,7 +7,7 @@ In this section, we will utilise the microphone input and audio output on the PY
 Quoting the PYNQ documentation:
 "The purpose of the base overlay design is to allow PYNQ to use peripherals on a board out-of-the-box. The design includes hardware IP to control peripherals on the target board, and connects these IP blocks to the Zynq PS. If a base overlay is available for a board, peripherals can be used from the Python environment immediately after the system boots"
 
-> For further information, please read: https://pynq.readthedocs.io/en/latest/pynq_overlays/pynqz1/pynqz1_base_overlay.html
+> For further information, please read: <https://pynq.readthedocs.io/en/latest/pynq_overlays/pynqz1/pynqz1_base_overlay.html>
 
 ## 2.2 Audio Processing (Software)
 
@@ -16,6 +16,7 @@ In this section, we will learn how to utilise the BaseOverlay and implement some
 In order to make a Whisper API call, we need to send the audio in a format that is accepted by Whisper. Unfortunately, the PYNQ-Z1 board's onboard microphone is a MEMS (Micro-Electro-Mechanical Systems) microphone, which records in PDM (pulse density modulation) format.
 
 A brief overview of the format types:
+
 | Format | Use Case | Description |
 |--------|----------|-------------|
 | **PDM** (Pulse Density Modulation) | Recording | MEMS microphones use PDM because it offers a straightforward, noise-immune digital output that is compact and cost-effective. |
@@ -34,32 +35,39 @@ The PYNQ-Z1 board's BaseOverlay lets you easily record and play back audio using
 
 You can adjust recording time and playback volume, and visualize or process recordings directly in Python.
 
-Try it yourself - Download and run the audio_playback.ipynb Jupyter notebook (provided by PYNQ) to experiment with recording and playing back audio on your board.
+Try it yourself - Download the [audio_playback.ipynb](https://github.com/Xilinx/PYNQ/blob/master/boards/Pynq-Z1/base/notebooks/audio/audio_playback.ipynb) Jupyter notebook from PYNQ repo, upload it to your board, and run the notebook experiment with recording and playing back audio.
 
 As you will see, the BaseOverlay design (and its bitfile `base.bit`) is already included in the PYNQ files, so the notebook simply imports it from `pynq.overlays.base`.
-
-> Provided Jupyter Notebook from PYNQ: https://github.com/Xilinx/PYNQ/blob/master/boards/Pynq-Z1/base/notebooks/audio/audio_playback.ipynb
 
 ## 2.3 Audio Processing (Hardware)
 
 In this section you will get to understand how exactly the PYNQ acts as a "embedded Python wrapper" which allows you to interact with your block design's components. Here we will take more of a embedded systems approach and modify both the BaseOverlay and also learn how drivers interact with those components. The end goal is to create a hardware-based solution for the PDM-to-PCM conversion we just completed in software.
 
-We now want to observe the audio components in the BaseOverlay's block design. To do so, we first need to download and open the design from Xilinx's PYNQ repository. Go to: https://github.com/Xilinx/PYNQ/tree/master, and either git clone or download the PYNQ repository locally. Based on the Vivado version installed, select the corresponding release version image.
+We now want to observe the audio components in the BaseOverlay's block design. To do so, we first need to download and open the design from Xilinx's PYNQ repository. Go to: <https://github.com/Xilinx/PYNQ/tree/master>, and git clone the PYNQ repository locally. Based on the Vivado version installed, select the corresponding release version image.
 
 ![](/images/versions.png)
 
-> Reference: https://pynq.readthedocs.io/en/latest/pynq_sd_card.html3
+For example, if you are using Vivado 2020.2, you would checkout the tag `v2.7.0` :
+
+```bash
+git clone https://github.com/Xilinx/PYNQ.git
+cd PYNQ
+git checkout v2.7.0
+```
+
+> Reference: <https://pynq.readthedocs.io/en/latest/pynq_sd_card.html3>
 
 Under the PYNQ repository which you downloaded, navigate to `boards/Pynq-Z1/base`. You will find a `base.tcl` and `build_ip.tcl` script.
 
 Now open up the Vivado GUI starting page. You will see a Tcl console at the bottom of window. In the console, navigate to the directory above and source both files. For example:
+
 ```tcl
-cd W:/PYNQ-master/boards/Pynq-Z1/base
+cd E:/PYNQ/boards/Pynq-Z1/base # Navigate to your local path
 source build_ip.tcl
 source base.tcl
 ```
 
-> If you still don't know how to launch the .tcl script from terminal or Vivado gui, reference the instructions in this link: https://xilinx.github.io/Alveo-Cards/cards/ul3524/build/html/docs/Docs/loading_ref_proj.html
+> If you still don't know how to launch the .tcl script from terminal or Vivado gui, reference the instructions in this link: <https://xilinx.github.io/Alveo-Cards/cards/ul3524/build/html/docs/Docs/loading_ref_proj.html>
 
 ![](/images/source.jpg)
 
@@ -118,17 +126,18 @@ First, we need something in hardware which mirrors the PDM-to-PCM functions writ
 Decimation reduces the sampling rate by keeping only every Nth sample while applying anti-aliasing filtering. CIC filters are ideal for this PDM-to-PCM conversion as they efficiently decimate the high-frequency PDM bitstream (often several MHz) down to standard audio sampling rates (e.g., 44.1 kHz) without requiring multipliers.
 
 Useful references:
+
 - [Moving Average and CIC Filters](https://tomverbeure.github.io/2020/09/30/Moving-Average-and-CIC-Filters.html)
 - [CIC Filters Explained (YouTube)](https://www.youtube.com/watch?v=8RbUSaZ9RGY)
 - [CIC Compiler Documentation - AMD](https://docs.amd.com/v/u/en-US/pg140-cic-compiler)
 
 Start by creating a new Vivado project with the same target board. This time we don't create a block design. Click on the "+" ubnder the "Sources" window. Select "Add or create design sources", then "Create File". The file type should be defaulted to "Verilog", and name the file name "pdm_mic" (or whatever makes sense to you).
 
-Copy and paste the already completed `pdm_mic.v` under `hw_files` in this repository. You will see two question marks under `pdm_microphone` in Design Sources hierarchy - one of them is `pdm_clk_gen`, and the other is `cic_compiler`.
+Copy and paste the already completed [`pdm_mic.v`](/hw_files/pdm_mic.v) under `hw_files` in this repository. You will see two question marks under `pdm_microphone` in Design Sources hierarchy - one of them is `pdm_clk_gen`, and the other is `cic_compiler`.
 
 ![](/images/pdm_mic.jpg)
 
-Repeat the create file procedure above for `pdm_clk_gen`.
+Repeat the create file procedure above for `pdm_clk_gen` ([`pdm_clk_gen.v`](/hw_files/pdm_clk_gen.v)).
 
 For the `cic_compiler`, click on "IP Catalog" on the sidebar under "Project Manager".
 
@@ -143,7 +152,7 @@ And you should end up with:
 
 ![](/images/audio_frontend.jpg)
 
-> If confused, take a look at this article: https://community.element14.com/challenges-projects/design-challenges/pathprogrammable3/b/blog/posts/p2p3-amd-vivado-cascaded-integrator-comb-cic-compiler-pdm-microphone-to-pcm-decimation
+> If confused, take a look at this article: <https://community.element14.com/challenges-projects/design-challenges/pathprogrammable3/b/blog/posts/p2p3-amd-vivado-cascaded-integrator-comb-cic-compiler-pdm-microphone-to-pcm-decimation>
 
 Now we have to package the IP. In case you have forgotten, select "Tools > Create and Package New IP", which will give you the following options:
 
@@ -157,6 +166,8 @@ Then package your IP:
 
 ### Task 2C: Modifying the audio_direct ip to work with PCM data
 
+> 📝 For this task, you need to create a new ip based on `audio_direct_v1_1`.
+
 Now we have some frontend module which converts the incoming PDM data into PCM data, we need to modify the `audio_direct` module to be able to handle PCM data instead of PDM data.
 
 As we know, under the hood of the BaseOverlay's `audio_direct` is an AXI4 peripheral which are MMIO register-controlled.
@@ -165,7 +176,15 @@ Now that we convert the PDM input from the microphone to PCM, we need to modify 
 
 ![](/images/audio_direct_new.jpg)
 
-Here's the new `audio_direct_v1_1` hierarchy we want to end up with. Here, we replace the old vhdl AXI4 peripheral file (XX_S_AXI_inst) with a newer Verilog version. I have also modified the underlying files to Verilog counterparts. Compare the new hierarchy to the old hierarchy - do you notice any removed files? Think about which files you will need to modify, and which ones you won't need to.
+Here's the new `audio_direct_v1_1` hierarchy we want to end up with. Here, we replace the old vhdl AXI4 peripheral file (XX_S_AXI_inst) with a newer Verilog version. Here are the files you need to import to replace the old files:
+
+- [`audio_direct_v1_1.v`](/hw_files/audio_direct_v1_1.v)
+- [`audio_direct_v1_1_S00_AXI.v`](/hw_files/audio_direct_v1_1_S00_AXI.v)
+- [`pdm_rxtx.v`](/hw_files/pdm_rxtx.v)
+- [`pdm_ser.v`](/hw_files/pdm_ser.v)
+
+Some of them are verilog conterparts of the original vhdl files, while some are modified versions to support PCM data.
+Compare the new hierarchy to the old hierarchy - do you notice any removed files? Think about which files you will need to modify, and which ones you won't need to.
 
 Based on your experience so far in lab 1 and lab 2, you should be able to modify the old BaseOverlay `audio_direct` hierarchy into the new hierarchy which supports PCM, so here I will provide less instructions.
 
@@ -187,7 +206,7 @@ Next, you should be able to add the IPs to the block design. Connect up the IPs 
 
 After completion of the design, we generate bitstream. Obtain the required `tcl`, `hwh` and `bit` files - repeating the steps you previously did in lab 1.
 
-> Note: You can run "validate design" to do a simple check of your block design before running bitstream generation. Reference: https://docs.amd.com/r/en-US/ug995-vivado-ip-subsystems-tutorial/Step-8-Validating-the-Design
+> Note: You can run "validate design" to do a simple check of your block design before running bitstream generation. Reference: <https://docs.amd.com/r/en-US/ug995-vivado-ip-subsystems-tutorial/Step-8-Validating-the-Design>
 
 ### Task 2E: Modifying the drivers
 
@@ -197,7 +216,7 @@ Next, we modify the Python drivers, as the drivers should now expect PCM data in
 
 Before you follow the instructions and copy the new `audio.py`, let's understand what is happening in all of the files. As mentioned in the driver instructions files, a test/debug C++ driver was created for PCM. This did not exist in the original PYNQ codebase. The following link takes you to the original PYNQ C++ driver:
 
-https://github.com/Xilinx/PYNQ/blob/master/pynq/lib/_pynq/_audio/audio_direct.cpp
+<https://github.com/Xilinx/PYNQ/blob/master/pynq/lib/_pynq/_audio/audio_direct.cpp>
 
 Let's take a look at how the test/debug C++ driver works. Firstly, the register offsets relative to the base address of the AXI4 peripheral is defined as constants, as well as the transmit and receive FIFO flags. Secondly, we define two inline functions `Read32` and `Write32`, which allows us to read and write to these registers to control the AXI4 peripheral. Thirdly, we have the driver functions such as `record`, which controls the AXI4 peripheral to record and save the receiving FIFO data into our statically-allocated buffer.
 
@@ -215,7 +234,7 @@ After following the driver instructions, now let's interact with them in Jupyter
 
 Upload the `lab2-hw.ipynb` notebook from `jupyter_notebook/lab2` to your PYNQ board, similar to how you did it in lab 1 tasks. Running all the cells should record and save a file named "rec1.wav". Download that file to your local device, and try playing it with your OS's default audio player. Check that you can hear the full recorded audio.
 
-> If you're not hearing anything, then try using an ILA to debug your hardware design: https://www.youtube.com/watch?v=5-CR5MRGPJE
+> If you're not hearing anything, then try using an ILA to debug your hardware design: <https://www.youtube.com/watch?v=5-CR5MRGPJE>
 
 ## 2.4 Conclusion
 
