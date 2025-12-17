@@ -1,53 +1,56 @@
 # Lab 1: Introduction to PYNQ and Vivado
 
-## 1.1 Environment setup
+## 1.1 Environment Setup
 
-### Toolchain versions
+### Toolchain Versions
 
-To get started with the labs, we will first setup the required toolchain - this might be a bit troublesome, so please take advantage of the debugging notes `debug.md`.
+Before beginning the labs, you must first set up the required toolchain. This process may present some challenges, so please refer to the debugging notes in `debug.md` if you encounter any issues.
 
-In this lab, we will use the PYNQ-Z1 board.
-> The lab was built on Windows 10, using PYNQ release version v2.7 and Xilinx Tool Version 2020.2. Feel free to use a more recent release version, but avoid using any release version before PYNQ v2.7.
->
-> @Cheng: The lab was tested on Windows 11, using PYNQ release version v3.1 and Xilinx Tool Version 2022.2.
+This lab uses the PYNQ-Z1 board.
 
-Note: Vivado's projects and tcl scripts are forward compatible, but not backwards compatible.
+> **Note:** This lab was originally developed on Windows 10 using PYNQ v2.7 and Xilinx Vivado 2020.2 (Kevin), and has been tested on Windows 11 using PYNQ v3.1 and Xilinx Vivado 2022.2 (Cheng).
+
+**Important:** Vivado projects and TCL scripts are forward-compatible but not backward-compatible.
 
 ![versions](/images/versions.png)
 
 > Source: <https://pynq.readthedocs.io/en/latest/pynq_sd_card.html>
 
-If you encounter any issues, please first refer to the debugging notes `debug.md`, before approaching the TAs or the module leader.
+If you encounter any issues, please first consult the debugging notes in `debug.md` before contacting the TAs or module leader.
 
-Operating system requirements: Windows 10 or 11, Linux (Ubuntu)
+**Operating System Requirements:** Windows 10/11 or Linux (Ubuntu)
 
-- If you are using a MacOS device, options include:
+- **MacOS users:** Please use one of the following options:
   - Virtual machine (VM)
-  - Using lab computers
+  - Lab computers
 
 ### Step 1: Install Vivado
 
-Go to the following [page](https://www.xilinx.com/support/download.html) to download Vivado.  For limited storage issues, refer to [debug.md](../debug.md/#limited-storage-space).
+Download Vivado from the [Xilinx download page](https://www.xilinx.com/support/download.html). If you have limited storage space, refer to [debug.md](../debug.md/#limited-storage-space) for guidance.
 
-### Step 2: Flashing the PYNQ image
+### Step 2: Flash the PYNQ Image
 
-Download the [Pynq SD Card Image](https://www.pynq.io/boards.html) onto the Pynq SD Card. You can use [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to write the image.
+Download the [PYNQ SD Card Image](https://www.pynq.io/boards.html) and write it to your SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/) or a similar tool.
 
-### Step 3: Setting up the board
+### Step 3: Set Up the Board
 
-> 📝 Please Watch video [Setting up your PYNQ-Z1 board](https://www.youtube.com/watch?v=SuXkbcK3w9E) before proceeding.
+> 📝 **Watch the video:** [Setting up your PYNQ-Z1 board](https://www.youtube.com/watch?v=SuXkbcK3w9E) before proceeding.
 
-Once you have flashed the PYNQ image onto your SD card, insert it into the PYNQ-Z1 board and connect the power supply. The board should be powered by either a micro-USB cable or a 5V power supply. Remember to switch the pin on the board to either use the USB or power supply.
+After flashing the PYNQ image onto your SD card, insert it into the PYNQ-Z1 board and connect power. The board can be powered via either a micro-USB cable or a 5V power supply. Ensure the power jumper is set to the appropriate position (USB or external power).
 
 ![Power options on PYNQ Z1 board](../images/power_options_on_pynq_z1.jpg)
 
-Let us now look into how the board works. The most important component is the Zynq-7000 System-On-Chip (SoC), which contains the Processing System (PS) made up of an ARM-Cortex A9 core, as well as the Programmable Logic (PL) which can be configured with custom hardware designs that we will soon create in Vivado. The block diagram for the Zynq-7000 SoC is shown below:
+Let's examine how the board works. The central component is the Zynq-7000 System-on-Chip (SoC), which consists of:
+- **Processing System (PS):** A dual-core ARM Cortex-A9 processor
+- **Programmable Logic (PL):** FPGA fabric that can be configured with custom hardware designs
+
+The block diagram for the Zynq-7000 SoC is shown below:
 
 ![Zynq-7000 SoC Block Diagram](../images/Zynq-7000SBlockDiagram.jpg)
 
 > Source: <https://www.mouser.co.uk/new/xilinx/xilinx-zynq-7000-socs/>
 
-On top of this, the PYNQ framework provides a full Ubuntu-based Linux distribution on the SD card, with Linux drivers for the interfaces between the PS and PL, wrapped in Python libraries which makes the design easier. The following excerpt from Xilinx's introduction to PYNQ gives an excellent visual representation of the overall systems you will be working with:
+The PYNQ framework provides a complete Ubuntu-based Linux distribution on the SD card, including Linux drivers for the PS-PL interfaces wrapped in Python libraries for easier development. The following slides from Xilinx's PYNQ introduction provide an excellent visual representation of the system architecture:
 
 | ![PYNQ Workshop Slide 9](../images/pynq-workshop-slide-9.png)  |
 | ------------------------------------------------------------ |
@@ -56,57 +59,57 @@ On top of this, the PYNQ framework provides a full Ubuntu-based Linux distributi
 
 > Source: <https://github.com/Xilinx/PYNQ_Workshop/blob/master/01_PYNQ_Workshop_introduction.pdf>
 
-### Step 4: Connecting to Jupyter Notebook
+### Step 4: Connect to Jupyter Notebook
 
-By default, PYNQ uses a web interface to interact with the FPGA board. We will now connect to the board's Jupyter Notebook server via Ethernet. Connect the Ethernet cable to the board and your computer. If your computer does not have an Ethernet port, you can use an Ethernet adapter.
+PYNQ uses a web-based Jupyter Notebook interface for interacting with the FPGA board. Connect an Ethernet cable between the board and your computer. If your computer lacks an Ethernet port, use an Ethernet adapter.
 
-> Note: if you connect Ethernet directly to your computer, PYNQ will not have access to the internet unless you bridge your computers internet connection. This means you will not be able to update system packages.
+> **Note:** When connecting directly to your computer via Ethernet, PYNQ will not have internet access unless you bridge your computer's internet connection. Without internet access, you cannot update system packages.
 
-#### Assigning a Static IP
+#### Assign a Static IP Address
 
-PYNQ by default uses a static IP address of `192.168.2.99`. You should configure your laptop to also have an IP address **on the same subnet as the PYNQ-Z1 board** (i.e. `192.168.2.X`) to be able to access the Jupyter Notebook server.
+PYNQ uses the static IP address `192.168.2.99` by default. Configure your computer to use an IP address **on the same subnet** (i.e., `192.168.2.X`) to access the Jupyter Notebook server.
 
-**Windows**
-Open up the `Network and Sharing Center`, and click on the `Ethernet connection`. Click on `Properties`, and then double-click on `Internet Protocol Version 4 (TCP/IPv4)`. Assign the following IP address: `192.168.2.X` where X is any number between 0 and 255, other than 99.
+**Windows:**
+1. Open `Network and Sharing Center`
+2. Click on the `Ethernet connection`
+3. Click `Properties`
+4. Double-click `Internet Protocol Version 4 (TCP/IPv4)`
+5. Assign a static IP address: `192.168.2.X` (where X is any number from 1-254, except 99)
 
-**Linux**
-See the PYNQ documentation: <https://pynq.readthedocs.io/en/latest/appendix/assign_a_static_ip.html#assign-a-static-ip-address>
+**Linux:**
+Refer to the PYNQ documentation: <https://pynq.readthedocs.io/en/latest/appendix/assign_a_static_ip.html#assign-a-static-ip-address>
 
-#### Open Notebook in browser
+#### Open Jupyter Notebook in Your Browser
 
-Now, open up your web browser and type in the following address: `192.168.2.99:9090`, which is PYNQ's default IP address. The default password is `xilinx`
+Open your web browser and navigate to: `192.168.2.99:9090`. Enter the default password: `xilinx`
 
-> Is your PYNQ board refusing to connect? Refer to the troubleshooting section in [debug.md](../debug.md/#refusing-to-connect). Troubleshooting might require the use of a SSH/Serial terminal.
+> **Connection Issues?** If your PYNQ board refuses to connect, refer to the troubleshooting section in [debug.md](../debug.md/#refusing-to-connect). You may need to use SSH or a serial terminal for debugging.
 
-### Getting a terminal (optional)
+### Getting a Terminal (Optional)
 
-You may have encountered terminals in various forms before in your work or previous modules. They can be very useful for controlling devices that are remote, low-powered, and/or have little I/O hardware of their own.
+Terminals are useful tools for controlling remote, low-powered devices with limited I/O hardware. While not strictly necessary (you can interact with PYNQ through the Jupyter Notebook interface), having terminal access is valuable for troubleshooting connection issues.
 
-The section on getting a terminal in [debug.md](../debug.md/#getting-a-terminal) explains how to get a terminal, either via SSH or a Serial console.
+The [debug.md](../debug.md/#getting-a-terminal) guide explains how to access a terminal via SSH or serial console.
 
-Note that this is not strictly necessary, as you should be able to use the Juputer Notebook interface to directly interact with your PYNQ board. However, having a terminal is useful for troubleshooting in cases where your board refuses to establish a connection.
+## 1.2 FIR Filter
 
-## 1.2 FIR filter
+You are now ready to create your first FPGA design. This section will guide you through implementing a Finite Impulse Response (FIR) filter.
 
-Now we are ready to get started. Open up Vivado and create a new project.
+> **Credits:** This section is based on [Jeff Johnson's tutorial](https://www.fpgadeveloper.com/2018/03/how-to-accelerate-a-python-function-with-pynq.html/). If you need additional guidance, refer to his YouTube tutorial. Thanks also to Sanjit Raman for providing screenshots. Note that some screenshots show Vivado 2024.2 on Ubuntu; your version may differ slightly, but the steps remain the same.
 
-> Credits to [this tutorial](https://www.fpgadeveloper.com/2018/03/how-to-accelerate-a-python-function-with-pynq.html/) by Jeff Johnson for this section. If you get lost in this section, feel free to refer to his YouTube tutorial.
+### Step 1: Create a New Project
 
-> Also credits to Sanjit Raman for helping with screenshots in this section. You will see Vivado 2024.2 version on Ubuntu being used for some of the screenshots, which might differ from the version you are using - the version should not matter in this section.
+1. Open Vivado and select **Create Project**
+2. Click **Next** to proceed through the wizard
+3. Enter a project name (e.g., `lab1`) and location. Ensure **Create project subdirectory** is checked
+4. Click **Next**
+5. Select **RTL Project** and choose **Do not specify sources at this time**
+6. Click **Next**
+7. Select the **PYNQ-Z1** board from the Boards tab. Double-click the part number to select it
 
-### Step 1: Creating a new project
+    > 📝 **Can't find PYNQ-Z1?** Switch to the `Parts` tab and select `xc7z020clg400-1` directly.
 
-1. Open up Vivado and create a new project.
-2. Press Next after reading the wizard.
-3. Enter a suitable name and location for the project (such as `lab1`). Ensure check subdirectory is enabled so that your project files are contained in a parent folder.
-4. Press Next.
-5. Select RTL Project, for now: "do not specify the sources".
-6. Press Next.
-7. Select the PYNQ-Z1 board. Double click on the part number to select it and move onto the summary.
-
-    > 📝 If you are unable to find PYNQ-Z1, go to `Parts` instead of `Boards`, and select `xc7z020clg400-1` part.
-
-8. Press Finish.
+8. Click **Finish**
 
 ![Vivado Start Page](/images/starting_page.png)
 
@@ -116,46 +119,62 @@ Now we are ready to get started. Open up Vivado and create a new project.
 
 ![Vivado New Project Wizard Summary](/images/new_project_summary.png)
 
-> Board part troubleshooting: If you are unable to find the PYNQ-Z1 board, refer to the troubleshooting section in [debug.md](../debug.md/#board-parts-not-found). Note that instead of clicking on `Boards`, you may also directly select from `Parts` the board part part (xc7z020-1clg400c).
+> **Board Part Troubleshooting:** If you cannot find the PYNQ-Z1 board, refer to [debug.md](../debug.md/#board-parts-not-found). Alternatively, use the `Parts` tab to directly select the part number `xc7z020clg400-1`.
 
-### Step 2: Creating the block design
+### Step 2: Create the Block Design
 
-On the column on the left hand side, click `Create Block Design`. You can leave the block design name as `design_1` for now.
+In the left sidebar under **IP INTEGRATOR**, click **Create Block Design**. You can use the default name `design_1`.
 
 ![Create Block Design](/images/create_block_design.png)
 ![Block Design](/images/lab1-block-design.png)
 
-Add the Zynq7 processing system - this contains the interfaces to the dual ARM cores on the FPGA. Double click on the Zynq7 PS block. Inside the Zynq7 PS IP settings, there is a part which notes how many HP slave ports are needed (only one needed in this case, HP0).
+Add the **ZYNQ7 Processing System** IP to your block design. This component provides the interface to the dual ARM Cortex-A9 cores. Double-click the ZYNQ7 PS block to open its configuration. Note the section for HP (High Performance) slave ports—you'll need one port (HP0) for this design.
 
 ![Add Zynq Processing System IP](/images/add_ip.png)
 
-Add the `Direct Memory Access` (DMA) block.
+Add the **AXI Direct Memory Access (DMA)** IP to your block design.
 
 ![Add AXI Direct Memory Access (DMA)](/images/dma.png)
 
-Double click on the `AXI DMA` block to customise it. Disable `Enable Scatter Gather Engine`. Maximise the size of the `Width of Buffer Length Register` to 26 bits. Press ok to exit the wizard.
+Double-click the `AXI DMA` block to configure it:
+- **Disable** `Enable Scatter Gather Engine`
+- Set `Width of Buffer Length Register` to **26 bits** (maximum)
+- Click **OK** to save
 
-Add the FIR filter: Vivado provides a wizard called the `FIR Compiler` which helps you to design your own filter.
+Add the **FIR Compiler** IP to design your filter.
 
 ![Add FIR Compiler Block](/images/fir_compiler.png)
 
-Create the FIR filter by specifying the coefficients. Double click on the FIR Compiler block to customise the IP, and paste in the following coefficients:
+Double-click the FIR Compiler block to configure it. In the **Filter Options** tab, paste the following coefficients:
 
 ```
 -255, -260, -312, -288, -144, 153, 616, 1233, 1963, 2739, 3474, 4081, 4481, 4620, 4481, 4081, 3474, 2739, 1963, 1233, 616, 153, -144, -288, -312, -260, -255
 ```
 
-Next, on the `Channel Specification` tab: change the `Input Sampling Frequency` and the `Clock Frequency` to 100MHz. Thus each clock tick on the FPGA will feed one input to the FIR filter.
+In the **Channel Specification** tab:
+- Set `Input Sampling Frequency` to **100 MHz**
+- Set `Clock Frequency` to **100 MHz**
+- This ensures each clock cycle processes one filter input
 
-On the Implementation tab: we should change the `Input Data Width` to 32 bits. We also want the output to have 32 bits, so select the `Output Rounding Mode` to `Non Symmetric Rounding Up` and then change the `Output Width` to 32 bits.
+In the **Implementation** tab:
+- Set `Input Data Width` to **32 bits**
+- Set `Output Rounding Mode` to **Non Symmetric Rounding Up**
+- Set `Output Width` to **32 bits**
 
-In the `Interface` tab, we specify how this block should communicate on the AXI bus, in this case, we should enable `Output TREADY` and `TLAST` via `Packet Framing`. It is slightly out of scope to read into the AXI Stream protocol, but if you are interested, you may want to read up on it.
+In the **Interface** tab:
+- Enable **Output TREADY**
+- Enable **TLAST** via `Packet Framing`
+- (This configures the AXI Stream protocol communication)
 
-Press OK to end the customise IP wizard.
+Click **OK** to save the configuration.
 
-Next, we connect the `M_AXIS_DATA` from the output of the FIR compiler to the `S_AXIS_S2MM` (Slave AXI interface for Stream-to-Memory-Mapped transfers) input port of the AXI DMA Block.
+Connect the IP blocks:
 
-Then, we connect the `M_AXI_S2MM` (Master AXI interface for Stream-to-Memory-Mapped transfers) ouput port of the DMA to the `S_AXIS_DATA` input port of the FIR Compiler. This allows us to feed a memory-mapped data format used by the DMA into the streaming input of signal data that the FIR compiler expects.
+1. Connect `M_AXIS_DATA` (FIR Compiler output) → `S_AXIS_S2MM` (AXI DMA input)
+   - This sends processed data from the filter to memory via DMA
+
+2. Connect `M_AXIS_MM2S` (AXI DMA output) → `S_AXIS_DATA` (FIR Compiler input)
+   - This feeds memory-mapped data from DMA into the filter's streaming interface
 
 Your block diagram should look like this:
 ![DMA to FIR Compiler Connections](/images/dma_to_fir_connection.png)
@@ -198,77 +217,79 @@ Now that the design is completed, click `F6` to validate your design. If validat
 
 Now to run your design on the PYNQ board, we need three files: a `tcl` file, a `hwh` files, and a `bit` file.
 
-To obtain the three files:
+**Export the required files:**
 
-- For `.tcl`: File > Export > Export Block Design
-- For `.hwh`: `lab1/lab1.gen/sources_1/bd/design_1/hw_handoff/design_1.hwh`
-- For `.bit`: `lab1/lab1.runs/impl_1/design_1_wrapper.bit`. Rename the file to `design_1.bit`
+1. **TCL file:** Go to **File → Export → Export Block Design**
+2. **HWH file:** Navigate to `<project>/lab1.gen/sources_1/bd/design_1/hw_handoff/design_1.hwh`
+3. **BIT file:** Navigate to `<project>/lab1.runs/impl_1/design_1_wrapper.bit` and rename it to `design_1.bit`
 
-Replace "lab1" with whatever you named your project.
+(Replace `<project>` with your actual project directory)
 
-### Loading the overlay on Jupyter Notebook
+### Load the Overlay in Jupyter Notebook
 
-Once you have obtained the files, connect your laptop to the PYNQ board.
-
-On your laptop browser, type in: `192.168.2.99`. When prompted with a password, enter "xilinx".
-
-Create a new folder (e.g., `InfoProc-lab1`) and upload your three files onto it, along with the provided Jupyter Notebook `jupyter_notebook/fir`.
+1. Ensure your laptop is connected to the PYNQ board via Ethernet
+2. Open a browser and navigate to `192.168.2.99:9090`
+3. Enter the password: `xilinx`
+4. Create a new folder (e.g., `InfoProc-lab1`)
+5. Upload the three files (`.tcl`, `.hwh`, `.bit`) to this folder
+6. Upload the provided Jupyter Notebook from `jupyter_notebook/lab1/fir.ipynb`
 
 ![jupyter](/images/jupyter.jpg)
 
-Click open the Jupyter Notebook. Run the cells and follow the instructions on the notebook, and observe the speed of the hardware IP for FIR filters compared to the software functions.
+7. Open the Jupyter Notebook and execute the cells
+8. Follow the instructions and observe the performance difference between hardware and software implementations of the FIR filter
 
-## 1.3 Simple register control (merge array)
+## 1.3 Simple Register Control (Merge Array)
 
-Here we attempt a simple array merging procedure. The purpose is to get a better understanding of how MMIO (memory-mapped IO) works and how to do simple register control.
-
-Let's start off by creating a block design which allows us to do the operation below, but in hardware:
+This section demonstrates how Memory-Mapped I/O (MMIO) and register control work by implementing a hardware array merger that performs:
 
 ```
 [1,3,5] + [2,4,6] => [1,2,3,4,5,6]
 ```
 
-> Reference video for a similar design: [Make a RTL-based IP work with PYNQ - AXILite adder](https://youtu.be/RPTuhVeoGTI?si=gbzsbD1SdPM9QIfI)
+> **Reference:** For a similar design, watch [Make an RTL-based IP work with PYNQ - AXI Lite adder](https://youtu.be/RPTuhVeoGTI?si=gbzsbD1SdPM9QIfI)
 
-### Step 1: Creating the block design
+### Step 1: Create the Block Design
 
-Similar to the previous section, we first create a project (you can name it `merge_array`).
+#### 1.1 Create a New Project
 
-1. Creating the block design
+Create a new Vivado project named `merge_array` following the same steps as Section 1.2.
 
-We first create a block design, and include the Zynq 7 processing system.
+#### 1.2 Create the Block Design
 
-2. Creating the merge array ip
+Create a block design and add the **ZYNQ7 Processing System**.
 
-Select `Tools > Create and Package New IP`.
+#### 1.3 Create the Merge Array IP
 
-When prompted with options, select "Create a new AXI4 peripheral".
+Select **Tools → Create and Package New IP** from the menu bar.
+
+1. Choose **Create a new AXI4 peripheral**
 
 ![New AXI4 peripheral](/images/new_axi4_periph.jpg)
 
-Feel free to name it anything you want to, in this example we name it `merge_array` with version 1.0.
+2. Name the peripheral `merge_array` with version `1.0`
 
 ![](/images/new_pkg.jpg)
 
-You will be prompted to add AXI4 interfaces to be supported by your peripheral. Not much changes are needed here, just make sure you set the number of registers to 5.
+3. In the **Add Interfaces** page, set **Number of Registers** to **5**
 
 ![](/images/add_if.jpg)
 
-Lastly, we create the peripheral with options "Edit IP". This will prompt Vivado to open a new window where you can edit this merge array IP.
+4. Select **Edit IP** and click **Finish**. Vivado will open a new project window for editing the IP.
 
 ![](/images/edit_ip.jpg)
 
-3. Modifying the merge array ip
+#### 1.4 Modify the Merge Array IP
 
-I'll guide you through transforming the first template into the second one step by step.
+You will now customize the auto-generated AXI4-Lite interface template.
 
-Initially, we see the following:
+Open the **Sources** window and locate `merge_array_v1_0_S00_AXI.v`.
 
 ![](/images/edit_merge_ip.jpg)
 
-Let's first modify this `merge_array_v1_0_S00_AXI` Verilog file.
+**Add New Signal Declarations**
 
-After the existing signal declarations (after `reg aw_en;`), add:
+Locate the line `reg aw_en;` and add the following signals immediately after it:
 
 ```systemverilog
 reg  aw_en;
@@ -281,7 +302,9 @@ reg fifo2_wr_en;
 wire [31:0] mergedFifoRdData;
 ```
 
-After the I/O connection assignments (after `assign S_AXI_RVALID = axi_rvalid;`), add:
+**Add Control Signal Assignment**
+
+Locate the line `assign S_AXI_RVALID = axi_rvalid;` and add the following immediately after:
 
 ```systemverilog
 assign S_AXI_RVALID = axi_rvalid;
@@ -290,7 +313,9 @@ assign S_AXI_RVALID = axi_rvalid;
 assign fsmStart = slv_reg0[0];
 ```
 
-Find the large `always` block:
+**Replace Register Write Logic**
+
+Locate the large `always @(posedge S_AXI_ACLK)` block that handles register writes:
 
 ```systemverilog
 always @( posedge S_AXI_ACLK )
@@ -382,7 +407,9 @@ begin
 end
 ```
 
-Find the `always @(*)` block for address decoding:
+**Update Register Read Logic**
+
+Locate the `always @(*)` block for address decoding:
 
 ```systemverilog
 always @(*)
@@ -416,7 +443,9 @@ end
 assign mergedFifoRdEn = slv_reg_rden && (axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 2);
 ```
 
-At the bottom, in the "User logic" section, replace:
+**Instantiate the Merge Core**
+
+Find the "User logic" section near the end of the file. Replace:
 
 ```systemverilog
 // Add user logic here
@@ -443,7 +472,7 @@ mergeCore mc(
 // User logic ends
 ```
 
-## Summary of Changes
+#### Summary of Register Mapping
 
 | Register Address | Modified Function |
 |-----------------|--------------|
@@ -455,220 +484,241 @@ mergeCore mc(
 
 The transformation converts a passive register file into an active hardware controller with proper handshaking!
 
-With this, we transformed a standard AXI4 peripheral template into a hardware controller with proper logic for register control.
+You have now transformed a standard AXI4 peripheral template into a custom hardware controller with proper register control and handshaking logic.
 
-4. Writing the merge array ip core logic
+#### 1.5 Add the Merge Core Logic
 
-Remember that we instantiated in the user logic section a module named `mergeCore`? We have the AXI4 registers to control it, but we need to develop this module's logic to make it actually be able to merge the two arrays together.
+The `mergeCore` module instantiated in the user logic section needs to be implemented.
 
-We first add sources by clicking the "+" in the `Sources` section. Select "Add or create design sources" when prompted, and then select "Add Files" to add [`mergeCore.v`](/hw_files/mergeCore.v) to the project.
+1. In the **Sources** panel, click the **+** button
+2. Select **Add or create design sources**
+3. Click **Add Files** and navigate to [`hw_files/mergeCore.v`](../hw_files/mergeCore.v)
+4. Click **OK** to add the file
 
 ![](/images/mergecore.jpg)
 
-Next, you will realize that you don't have the FIFOs required for the merge array logic, and you will see file icons with red question marks.
+You'll notice that `mergeCore.v` references FIFO modules that don't exist yet (indicated by red question marks).
 
 ![](/images/mergecore_red.jpg)
 
-To add the FIFOs, we can use Xilinx's FIFO Generator IP. Click on "IP Catalog" on the sidebar under "Project Manager", and search for "FIFO Generator".
+#### 1.6 Generate FIFO IPs
+
+1. Click **IP Catalog** in the **Project Manager** section
+2. Search for **FIFO Generator**
+3. Double-click to open the configuration wizard
 
 ![](/images/fifo_gen.jpg)
 
-Now for the FIFO Generator configurations:
+**Configure the FIFOs:**
 
-Keep it as native and a common clock block RAM.
-
-The only changes required is in the "Native Ports" tab.
+- Keep **Interface Type:** Native
+- Keep **Clocking Mode:** Common Clock Block RAM
+- Navigate to the **Native Ports** tab for the following changes:
 
 ![](/images/fifo_gen_config.jpg)
 
 ![array-fifo](/images/lab1-array-fifo.png)
 
-> Select "1024" for write/read depth of arrayFifo1 and arrayFifo2, and select "2048" for mergedFifo.
-> Pay attention to the naming - it must match the module name which you used in the `mergeCore` code. The screenshot only shows the instantiation for `mergedFifo`. You should instantiate another FIFO Generator for `arrayFifo` with depth 1024, which will be used by both `arrayFifo1` and `arrayFifo2`.
+**Create two FIFO configurations:**
 
-After completion, click on `Edit Packaged IP`. Keep a record of the Identification tab of the IP:
+1. **arrayFifo** (for input arrays):
+   - Component Name: `arrayFifo`
+   - Write/Read Depth: **1024**
+   - Data Width: **32 bits**
+
+2. **mergedFifo** (for output):
+   - Component Name: `mergedFifo`
+   - Write/Read Depth: **2048**
+   - Data Width: **32 bits**
+
+> **Important:** The component names must exactly match the module instantiations in `mergeCore.v`.
+
+After creating both FIFOs:
+
+1. Navigate to **Package IP → Edit Packaged IP**
+2. Review the **Identification** tab to note the IP version
 
 ![](/images/lab1-edit-pkg.png)
 
-[](/images/pkg_ip.jpg)
-
-Then click on `Re-Package IP` under `Review and Package IP`.
+3. Under **Review and Package**, click **Re-Package IP**
 
 ![](/images/lab1-package-ip.png)
 
-Now return to the original `merge_array` Vivado project.
+4. Close the IP project and return to your main `merge_array` project
 
-In the block design, add the `merge_array_v1.0` IP.
+#### 1.7 Complete the Block Design
+
+1. In the block diagram canvas, click the **+** button
+2. Search for and add `merge_array_v1_0`
 
 ![](/images/lab1-add-merge-array-v1.0.png)
-[](/images/merge_array_bd.jpg)
 
-Run connection automation, then right click on `design_1` (with the orange square on the left) and "create HDL wrapper".
+3. Run **Connection Automation** to connect the IP to the ZYNQ PS
+4. Right-click `design_1` and select **Create HDL Wrapper**
+5. Choose **Let Vivado manage wrapper and auto-update**
 
 ![](/images/lab1-create-hdl-wrapper.png)
 
-5. Generating bitstream and required files
+#### 1.8 Generate Bitstream and Export Files
 
-Now let's run `Generate Bitstream`. After it completes, we need to obtain three files to run the hardware successfully with Jupyter Notebook, as per the previous section.
+1. Click **Generate Bitstream** and wait for completion
+2. Export the three required files:
 
-- For `.tcl`: File > Export > Export Block Design
-- For `.hwh`: `merge_array/merge_array.gen/sources_1/bd/design_1/hw_handoff/design_1.hwh`
-- For `.bit`: `merge_array/merge_array.runs/impl_1/design_1_wrapper.bit`. Rename the file to `design1.bit`
+   - **TCL:** **File → Export → Export Block Design**
+   - **HWH:** `merge_array/merge_array.gen/sources_1/bd/design_1/hw_handoff/design_1.hwh`
+   - **BIT:** `merge_array/merge_array.runs/impl_1/design_1_wrapper.bit` (rename to `design_1.bit`)
 
 ![](/images/export_bd.jpg)
 
-Afterwards, upload them into a folder on Jupyter Notebook.
+3. Upload all three files to a folder on your PYNQ Jupyter Notebook interface
 
-### Step 2: Create the drivers
+### Step 2: Create the Drivers
 
-Now onto the drivers!
+With the hardware complete, you need software drivers to control it from Python.
 
-Don't worry, the drivers have already been prewritten for you under the `drivers/merge_driver` folder. Let's look at what is being done under the hood which allows you to simply make this change.
+Pre-written drivers are provided in the `drivers/merge_driver` folder. This section explains how they work and how to install them.
 
-The `merge_driver` folder contains several files that you will need to place in your PYNQ board's Linux system. You can either do that through PuTTY or the terminal in Jupyter Notebook.
+#### 2.1 Install Driver Files
+
+Transfer the driver files to your PYNQ board using either SSH (PuTTY) or the Jupyter Notebook terminal.
 
 ![Placement of Merge Drivers in PYNQ](/images/merge_drivers_placement.jpg)
 
-The screenshot above shows the drivers placement relative to the path `/home/xilinx/pynq/lib` on your PYNQ board. For clearer reference:
-
-Under /home/xilinx/pynq/lib:
-
-- merge.py
-
-Under /home/xilinx/pynq/lib/_pynq/_merge:
-
-- merge_driver.cpp
-- merge_driver.h
-- Makefile
-
-To build `libmerge.so` from the C++ source files (`merge_driver.cpp` and `merge_driver.h`):
-
-1. Navigate to the directory containing the Makefile: `/home/xilinx/pynq/lib/_pynq/_merge`
+**File Structure:**
 
 ```
-cd /home/xilinx/pynq/lib/_pynq/_merge
+/home/xilinx/pynq/lib/
+├── merge.py
+└── _pynq/
+    └── _merge/
+        ├── merge_driver.cpp
+        ├── merge_driver.h
+        └── Makefile
 ```
 
-2. Run the `make` command, which will compile the C++ code and create the shared library
+**Build the Shared Library:**
 
-```
-make
-```
+1. Navigate to the driver directory:
+   ```bash
+   cd /home/xilinx/pynq/lib/_pynq/_merge
+   ```
 
-3. Copy `libmerge.so` from the `/home/xilinx/pynq/lib/_merge/` directory to the `/home/xilinx/pynq/lib/` directory
+2. Compile the C++ code:
+   ```bash
+   make
+   ```
 
-```
-cp libmerge.so ../
-```
+3. Copy the compiled library:
+   ```bash
+   cp libmerge.so ../../
+   ```
 
-### Step 3: Understanding the drivers
+### Step 3: Understanding the Drivers
 
-What exactly are the drivers doing?
+The driver creates a bridge between Python and your custom FPGA hardware, enabling register control and data transfer between the PS (ARM processor) and PL (FPGA fabric).
 
-The driver code creates a bridge between Python and the custom hardware on the FPGA, allowing you to control registers and pass data between the PS (ARM processor) and PL (FPGA fabric) efficiently.
+#### 3.1 C++ Driver Layer
 
-First, we look at the C++ driver layer that interacts with the AXI4 peripheral that we instantiated in the block design.
+**Header File (`merge_driver.h`):**
+Defines memory-mapped register offsets for the merge IP core. These offsets are accessed as `BaseAddr + REGISTER_OFFSET`.
 
-#### C++ driver layer
+**Source File (`merge_driver.cpp`):**
+Contains `merge_read()` and `merge_write()` functions that access hardware registers:
 
-The header file (`merge_driver.h`) defines memory-mapped register offsets for your merge IP core. You will observe them being called by `BaseAddr + SOME_REG_OFFSET` in the C++ driver file.
-
-The C++ driver file (`merge_driver.cpp`) contains `merge_read()` and `merge_write()` functions which perform memory access to the hardware registers using volatile pointers:
-
-```
+```c++
 *(volatile uint32_t *)addr = data;
 ```
 
-The `volatile` keyword prevents compiler optimization, ensuring every read/write actually accesses the hardware registers.​
+The `volatile` keyword ensures the compiler doesn't optimize away register accesses.
 
-Looking at the `merge` function:
+**The `merge()` Function:**
 
-It first loops through arrays `a` and `b`, writing each element to `MERGE_1_REG` and `MERGE_2_REG` respectively. It then writes `0x1` to MERGE_CTRL_REG to trigger the hardware merge.
+1. Writes each element of arrays `a` and `b` to `MERGE_1_REG` and `MERGE_2_REG`
+2. Triggers the merge operation by writing `0x1` to `MERGE_CTRL_REG`
+3. Polls `MERGE_STATUS_REG` until completion (reads 0)
+4. Reads merged results from `MERGE_RESULT_REG` into `BufAddr`
 
-Next, it continuously reads `MERGE_STATUS_REG` until it returns 0, indicating completion. Finally, it reads the merged output from `MERGE_RESULT_REG`, storing it in the output buffer `BufAddr`.
+The `extern "C"` linkage prevents C++ name mangling, enabling CFFI to call the function.
 
-The extern "C" linkage prevents C++ name mangling, making the function callable from C-style interfaces.
+#### 3.2 Python Driver Layer
 
-#### Python driver layer
+**How Python Controls C++ Functions:**
 
-Q1: How can we control these C++ functions?
+The Python driver uses **CFFI** (C Foreign Function Interface) to call compiled C++ code:
 
-Notice the use of `cffi` in Python? This stands for "C Foreign Function Interface", an [interface in Python used for calling C code](https://pypi.org/project/cffi/).
-
-The Python driver uses CFFI to load and call the compiled C++ library:
-
-```
+```python
 self._libmerge = self._ffi.dlopen(os.path.join(LIB_SEARCH_PATH, "libmerge.so"))
 ```
 
-CFFI provides a clean way to transfer data between Python and C/C++, handling type conversions automatically.
+CFFI handles type conversions automatically, providing a clean interface between Python and C/C++.
 
-Usually, embedded developers simply interface with the hardware by directly writing C drivers - PYNQ was created to lower the boundary of FPGA embedded development by pre-writing most drivers and wrapping them in C++.
+> **Why PYNQ?** Traditional FPGA development requires writing low-level C drivers. PYNQ simplifies this by providing pre-written drivers wrapped in Python, making FPGA development accessible to software engineers.
 
-The `cdef()` calls declare the C function signatures so CFFI knows how to call them:
+**Function Declarations:**
 
-```
+The `cdef()` calls declare C function signatures:
+
+```python
 self._ffi.cdef("void merge(unsigned int BaseAddr, ...);")
 ```
 
-The MergeIP class inherits from DefaultIP, integrating with PYNQ's overlay system. The initialization includes:
+**MergeIP Class:**
 
-- `bindto`: Specifies which Vivado IP block this driver controls (matches the IP's `VLNV` identifier)
-
-- `self.mmio.array`: Provides access to the memory-mapped address space of the IP
-
-- `self.buffer`: NumPy array which stores the output result, which is the merged array
-
-Q2: Where do the arrays `unsigned int *a` and `unsigned int *b` come from?
-
-The arrays `unsigned int *a` and `unsigned int *b` come from **Python through the CFFI and ctypes interface**. Here's the complete data flow:
-
-When you call the `merge()` method in Python with two lists or arrays:
-
-```python
-result = merge_ip.merge([1, 3, 5], [2, 4, 6])
+Inherits from `DefaultIP`, integrating with PYNQ's overlay system:
 ```
 
-The Python driver first converts them to NumPy arrays:[1]
+- **`bindto`**: Specifies which Vivado IP block this driver controls (matches the VLNV identifier)
+- **`self.mmio.array`**: Provides memory-mapped access to IP registers
+- **`self.buffer`**: NumPy array for storing the merged output
 
-```python
-a = numpy.array(a, dtype=numpy.uint32)  # [1, 3, 5]
-b = numpy.array(b, dtype=numpy.uint32)  # [2, 4, 6]
-```
+**Data Flow: Python Arrays to C++ Pointers**
 
-NumPy arrays store their data in contiguous memory buffers. The `ctypes.data` attribute provides the **memory address** where this data lives:
+When you pass Python lists to the driver, they are converted to C++ pointers through CFFI. Here's the complete flow:
 
-```python
-a.ctypes.data  # Returns integer memory address
-b.ctypes.data  # Returns integer memory address
-```
+1. **Python Function Call:**
+   ```python
+   result = merge_ip.merge([1, 3, 5], [2, 4, 6])
+   ```
 
-CFFI's `cast()` function converts these Python integer addresses into C-style pointers that can be passed to C/C++ functions:
+2. **Convert to NumPy Arrays:**
+   ```python
+   a = numpy.array(a, dtype=numpy.uint32)  # [1, 3, 5]
+   b = numpy.array(b, dtype=numpy.uint32)  # [2, 4, 6]
+   ```
 
-```python
-a_ptr = self._ffi.cast("unsigned int *", a.ctypes.data)
-b_ptr = self._ffi.cast("unsigned int *", b.ctypes.data)
-```
+3. **Get Memory Addresses:**
+   NumPy stores data in contiguous memory. The `ctypes.data` attribute returns the memory address:
+   ```python
+   a.ctypes.data  # Memory address as integer
+   b.ctypes.data  # Memory address as integer
+   ```
 
-At this point, `a_ptr` and `b_ptr` are CFFI pointer objects that point directly to the NumPy array data in memory.
+4. **Cast to C Pointers:**
+   CFFI converts Python integers to C-style pointers:
+   ```python
+   a_ptr = self._ffi.cast("unsigned int *", a.ctypes.data)
+   b_ptr = self._ffi.cast("unsigned int *", b.ctypes.data)
+   ```
 
-When you call the C++ function through CFFI:
+5. **Call C++ Function:**
+   ```python
+   self._libmerge.merge(
+       self._base_addr,  # BaseAddr
+       c_buf,            # BufAddr
+       a_ptr,            # unsigned int *a
+       a_size,           # a_size
+       b_ptr,            # unsigned int *b
+       b_size            # b_size
+   )
+   ```
 
-```python
-self._libmerge.merge(
-    self._base_addr,  # BaseAddr
-    c_buf,            # BufAddr
-    a_ptr,            # a → becomes unsigned int *a
-    a_size,           # a_size
-    b_ptr,            # b → becomes unsigned int *b
-    b_size            # b_size
-)
-```
+**Zero-Copy Access:** C++ directly accesses the NumPy array memory—no data copying occurs. Both Python and C++ work with the same memory buffer, maximizing efficiency.
 
-CFFI marshals these pointer objects into actual C++ pointer arguments. The C++ function receives `a` and `b` as `unsigned int *` pointers that **directly reference the original NumPy array memory**.
+### Step 4: Run the Jupyter Notebook
 
-This approach is **zero-copy access**: the C++ code reads directly from the same memory locations where Python stored the data. No data duplication occurs—both Python and C++ are working with the same underlying memory buffer.
+1. Upload the provided Jupyter Notebook from `jupyter_notebook/lab1/Merge.ipynb` to your PYNQ board
+2. Ensure the three hardware files (`.bit`, `.hwh`, `.tcl`) are in the same directory
+3. Open the notebook and execute all cells
+4. Verify that the merged array is correctly printed
 
-### Step 4: Running the Jupyter Notebook
-
-Now upload the Jupyter Notebook for this task, which has been provided under `jupyter_notebook/lab1`. Running all the code cells should result in the resulting merged array being printed.
+The hardware accelerator should successfully merge the two input arrays, demonstrating the complete hardware-software integration using MMIO and custom IP cores.
