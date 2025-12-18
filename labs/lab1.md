@@ -546,11 +546,23 @@ After creating both FIFOs:
 
 ![](/images/lab1-edit-pkg.png)
 
-3. Under **Review and Package**, click **Re-Package IP**
+3. Select the **File Groups** tab. You should see 0 files included for the "Standard > Synthesis" file group.
+
+![](/images/lab1-package-ip-file-groups.jpg)
+
+Click on "**Merge changes from File Groups Wizard**". You should now see the hardware source files included.
+
+![](/images/lab1-package-ip-file-groups-included.jpg)
+
+If the above option does not show up, an alternate method is to add files manually. You can do so by right-clicking "**Synthesis**" file group, then selecting "**Add Files...**"
+
+![](/images/lab1-package-ip-file-groups-manual.jpg)
+
+4. Next, under **Review and Package**, click **Re-Package IP**
 
 ![](/images/lab1-package-ip.png)
 
-4. Close the IP project and return to your main `merge_array` project
+5. Close the IP project and return to your main `merge_array` project
 
 #### 1.7 Complete the Block Design
 
