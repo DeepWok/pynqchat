@@ -44,25 +44,25 @@ Note: The lab is designed for Zynq-based boards with onboard MEMS microphones, s
 ## Labs
 ### Lab 1
 
-[Lab 1 - Introduction to PYNQ and Vivado](labs/lab1/lab1.md)
+[Lab 1 - Introduction to PYNQ and Vivado](labs/lab1.md)
 
 In this lab, you will setup the PYNQ board and Xilinx toolchain, and familiarise yourself with the tools by generting a simple Vivado block design for an FIR filter, and implement it as an overlay in the Jupyter Notebook to witness the power of hardware acceleration.
 
 ### Lab 2
 
-[Lab 2 - Audio Processing](labs/lab2/lab2.md)
+[Lab 2 - Audio Processing](labs/lab2.md)
 
 In this lab, you will explore the audio processing capabilities of the PYNQ board, and implement a software PDM-PCM conversion in Python. You will also design a hardware PDM-PCM conversion in Vivado, and understand how to do basic embedded development with memory-mapped register control and driver development.
 
 ### Lab 3
 
-[Lab 3 - Building the chatbot](labs/lab3/lab3.md)
+[Lab 3 - Building the chatbot](labs/lab3.md)
 
 In this lab, you will combine the processing powers of PYNQ, Whisper and AWS, to create a chatbot that can understand your speech and communicate with you. You will also connect the chatbot to AWS services by utilising AWS's provided databases, such as DynamoDB. Lastly, you will design and 3D print your chatbot by CAD scripting.
 
 ### Lab 4
 
-[Lab 4 - AWS](labs/lab4/lab4.md)
+[Lab 4 - AWS](labs/lab4.md)
 
 <!-- In this lab, you will learn how to connect the PYNQ board to AWS services, and use AWS's provided databases, such as DynamoDB. You will also learn how to make API calls to AWS services, and store the data in the cloud. -->
 
