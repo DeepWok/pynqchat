@@ -7,7 +7,8 @@ This repository contains the new labs for the 2025-2026 Imperial EIE Information
 The core idea of this module is to:
 Understand the choices and tradeoffs of placing information processing nodes on the edge (e.g. local FPGA) and remote cloud environments (e.g. AWS).
 
-Tested software versions:
+Tested software versions (Lab 1-3):
+
 - Vivado 2020.2, PYNQ v2.7, Windows 10
 - We recommend you use the tested software to avoid unexpected behaviors
 - Mac users can consider virtual machine options
@@ -23,6 +24,10 @@ There will be 4 lab weeks (2 hours of lab per week). The labs are designed to be
 | 3 | Lab 3 | Building the chatbot |
 | 4 | Lab 4 | AWS |
 | Optional | Lab 5 | Extensions |
+
+## Important dates & Assessment info
+
+You can find them in [dates](dates.md).
 
 ## Goal
 
@@ -67,15 +72,15 @@ In this lab, you will combine the processing powers of PYNQ, Whisper and AWS, to
 <!-- In this lab, you will learn how to connect the PYNQ board to AWS services, and use AWS's provided databases, such as DynamoDB. You will also learn how to make API calls to AWS services, and store the data in the cloud. -->
 
 
-### Lab 5 (optional)
+### Lab 5
 
 [Lab 5 - Extensions](labs/lab5-optional/lab5.md)
 
 Optional extensions for the labs, where you can explore different parts of the lab and improve on the current design. Note that these extensions are open-ended and are not restricted to the suggestions provided. While "optional", bonus marks will be awarded to your lab oral grades if you are able to complete the labs and demonstrate a nice challenging extension.
 
-## Coursework
+## Final Team Project
 
-The coursework is open-ended, but must include the use of the PYNQ board and AWS.
+The final team project is open-ended, but must include the use of the PYNQ board and AWS.
 
 It should be noted that while you have been taught to use PYNQ's Jupyter Notebook infrastructure to communicate and send commands to the programmable logic, it is always possible to build application / memory controllers in BareMetal or PetaLinux. 
 You may choose to do so for your project is you find it suitable.
