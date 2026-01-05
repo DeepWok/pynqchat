@@ -556,9 +556,14 @@ Click on "**Merge changes from File Groups Wizard**". You should now see the har
 
 If the above option does not show up, an alternate method is to add files manually. You can do so by right-clicking "**Synthesis**" file group, then selecting "**Add Files...**"
 
+Hints:
+* The file orders matter here.
+* When adding these files manually, sometimes you have to manually set the Model Name entry for Vivado to identify the top-level file.
+
+
 ![](/images/lab1-package-ip-file-groups-manual.jpg)
 
-4. Next, under **Review and Package**, click **Re-Package IP**
+1. Next, under **Review and Package**, click **Re-Package IP**
 
 ![](/images/lab1-package-ip.png)
 
@@ -748,3 +753,10 @@ When you pass Python lists to the driver, they are converted to C++ pointers thr
 4. Verify that the merged array is correctly printed
 
 The hardware accelerator should successfully merge the two input arrays, demonstrating the complete hardware-software integration using MMIO and custom IP cores.
+
+Sometimes, if your ip name is mimatching, you would not see overlay.ip_name being recognized as the correct `pynq.lib`, as in this case you likely see the `type` being `DefaultIP`.
+```python
+print(type(overlay.merge_v1_0_0))
+# Should show <class 'pynq.lib.merge.MergeIP'>
+```
+refer to [debug.md](../debug.md/#mismatching-driver-name) for guidance.

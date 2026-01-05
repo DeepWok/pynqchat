@@ -225,6 +225,8 @@ Using your experience from exploring the BaseOverlay, modify the old `audio_dire
 
 **Hint:** Start with the design source files within the `audio_direct_v1_1` IP that you explored earlier in this section.
 
+**Hint:** You may need to instantiate new IPs based on what you see is missing there when instantiating your own `audio_direct_v1_1`.
+
 Once finished, package the IP.
 
 ### Task 2D: Connecting the Modified Modules
