@@ -60,6 +60,59 @@ Steps to take:
 4. Run `nmcli device wifi list` to see the available networks. If your network is not listed, run `nmcli device wifi connect <SSID> password <password>` to connect to your network.
 5. Run `nmcli connection show --active` to see the active connections.
 
+### Mimatching driver name
+
+You would need to check whether you have set the name correctly in your lib binding file
+`pynqchat/drivers/merge_driver/merge.py`.
+
+Locate the following line:
+```python
+ bindto = ['xilinx.com:user:merge_v1_0:1.0'] # Modify based on how you named the IP during creation 
+```
+
+This now would have to match the ip name as in ip_name:1.0. Otherwise the class hits the DefaultIP class and it won't see the .merge method, did you use a different ip name? If so, consider modify this file to a matching one.
+
+### On Vivado 2022
+
+Higher versions of Vivado (eg. 2022) are only partially tested.
+
+**Running the tcl**
+
+To make minor versions to run, one have to check out a different PYNQ version, you can find a copy of the supported version in here
+https://github.com/Xilinx/PYNQ/blob/v3.0.1/boards/Pynq-Z1/base/base.tcl
+
+```
+ # MODIFICATION HISTORY:
+ #
+ # Ver   Who  Date     Changes
+ # ----- --- -------- -----------------------------------------------
+ # 1.00a pp  01/24/2017 initial release
+ # 1.00b yrq 08/08/2017 added trace analyzers for pmoda, pmodb, arduino
+ # 1.00c pp  01/09/2018 retargeted to 2017.4
+ # 1.00d pp  01/09/2018 removed pmodb_trace_analyzer, updated with io_switch
+ # 1.00e pp  01/22/2018 updated IPs used, hierarchical blocks updated for ports
+ # 1.00f pp  02/09/2018 fixed iop_pmoda hierarchical port names
+ # 1.00g pp  04/12/2018 Renamed reset block instances and added xlconcat_0
+ # 2.00  yrq 05/16/2018 Remove top level HDL wrapper
+ # 2.01  yrq 08/08/2018 update to 2018.2
+ # 2.04  yrq 01/17/2019 update to 2018.3
+ # 2.5   yrq 08/22/2019 update to 2019.1
+ # 2.6   yrq 11/06/2019 update to 2020.1
+ # 2.70  mr  05/17/2021 update to 2020.2
+ # 2.80  mr  09/02/2022 update to 2022.1
+ #
+ # </pre>
+ #
+#########
+```
+Vivado 2024 is also supported in the latest version of PYNQ, but the Vivado tool flow itself has had many significant changes, so this would break many parts in the current instructional.
+
+Adapting the base.tcl, these base.tcl can run, but would need adaption like changing
+https://github.com/Xilinx/PYNQ/blob/93ddd21ab623883590a8c8b07f0b157b2855da4b/boards/Pynq-Z1/base/base.tcl#L59
+to different versions, then the base.tcl would run.
+
+Clock frequency on the new CIC ip has to be greater than 200MHz in Vivado 2022 and above, the effect of this on later labs has not being tested 
+
 ## 4. References
 
 ### PYNQ resources
