@@ -6,9 +6,9 @@
 
 Before beginning the labs, you must first set up the required toolchain. This process may present some challenges, so please refer to the debugging notes in `debug.md` if you encounter any issues.
 
-This lab uses the PYNQ-Z1 board and requires Windows or Linux for development. Please ensure you have **Vivado 2022.2** installed, as newer versions may have IP template changes that could affect the lab exercises.
+This lab uses the PYNQ-Z1 board and requires Windows or Linux for development. Please ensure you have **Vivado 2020.2** installed, as newer versions may have IP template changes that could affect the lab exercises.
 
-> **Note:** This lab was originally developed on Windows 10 using PYNQ v2.7 and Xilinx Vivado 2020.2 (Kevin), and has been tested on Windows 11 using PYNQ v3.1 and Xilinx Vivado 2022.2 (Cheng).
+> **Note:** This lab was originally developed on Windows 10 using PYNQ v2.7 and Xilinx Vivado 2020.2 (Kevin), and has been tested on Windows 11 using PYNQ v3.1 and Xilinx Vivado 2020.2 (Cheng).
 
 **Important:** Vivado projects and TCL scripts are forward-compatible but not backward-compatible.
 
