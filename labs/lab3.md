@@ -22,7 +22,7 @@ read the security warning.
 Now that you have an internet connection, you can install all the software
 libraries required for the chatbot onto the PYNQ board. Fortunately for you
 again, this module is not about dealing with so-called "dependency hell". Use
-[jupyter_notebook/lab3/dependencies.ipynb](jupyter_notebook/lab3/dependencies.ipynb)
+[jupyter_notebook/lab3/dependencies.ipynb](/jupyter_notebook/lab3/dependencies.ipynb)
 to install the dependencies.
 
 ## 3.3 Converting recorded audio to text
@@ -245,7 +245,7 @@ difference() {
 }
 ```
 
-![OpenSCAD example: hollow cube with open top](./images/lab3-openscad-example.jpg)
+![OpenSCAD example: hollow cube with open top](/images/lab3-openscad-example.jpg)
 
 A good place to start with understanding SCAD syntax is the [OpenSCAD
 cheatsheet](https://openscad.org/cheatsheet/). This links to the OpenSCAD wiki,
