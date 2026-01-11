@@ -59,7 +59,7 @@ def normalized_pcm(audio):
     return volume, audio_data.astype(np.int16)
 
 audio.record(10)
-recording = normalized_pcm(audio)
+_, recording = normalized_pcm(audio)
 ```
 
 Then we can pass it to the speech recognition API:
@@ -67,7 +67,7 @@ Then we can pass it to the speech recognition API:
 ```python
 import speech_recognition as sr
 recognizer = sr.Recognizer()
-text = recognizer.recognize_google(sr.AudioData(audio, 16000, 2))
+text = recognizer.recognize_google(sr.AudioData(recording, 16000, 2))
 
 print(f"You said: {response}")
 ```
@@ -137,7 +137,7 @@ same as before:
 
 ```python
 audio.record(10)
-recording = normalized_pcm(audio)
+_, recording = normalized_pcm(audio)
 ```
 
 We can then process the data using openwakeword (in chunks), looking for the
@@ -268,5 +268,5 @@ the PYNQ board) can be seen in `assembly.scad`. Start from this base, and make
 it your own! If you want to design parts of the case in something more familiar
 to you than OpenSCAD, some formats (e.g. SVG) can be imported directly into
 OpenSCAD, others can be converted to or from OpenSCAD. You can also design the
-case entirely in another program if you with, the only requirement is that the
+case entirely in another program if you wish, the only requirement is that the
 final 3D model for printing is in STL format.
