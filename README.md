@@ -89,6 +89,11 @@ It should be noted that while you have been taught to use PYNQ's Jupyter Noteboo
 You may choose to do so for your project is you find it suitable.
 You will also be awarded additional marks for close-to-metal implementations.
 
+## Helpful Links
+* https://discuss.pynq.io/
+* https://www.chipverify.com/tutorials/systemverilog
+* https://platform.openai.com/docs/api-reference/introduction
+
 
 --- 
 
