@@ -3,9 +3,9 @@
 ## Important Dates
 
 - **5th Jan**: [Team forming proposals](https://docs.google.com/spreadsheets/d/1FI3nGvVdA4az_u8JRYgjxC5r5hZf3VzLRgIgoxX1ruQ/edit?usp=sharing), team members **must** be from the same cohort (Group A or B, 6-7 students, ideally 7, per group), a team of more than 7 people would be ignored automatically
-- **16th Jan**: Team forming proposal ends
+- **15th Jan (10pm)**: Team forming proposal ends
   - people who do not have a group would be grouped by GTAs
-  - we will announce the final team formation on the **19th Jan**
+  - we will announce the final team formation on the **16th Jan AM** before the lab
   - we will try our best to respect people's team formation, but sometimes would also have to break teams to make sure numbers are correctly distributed.
 - **11th Feb**: Mid-term lab oral (20%), Q&As as a group, for contents in all the labs. You can find the examination info [here](assessments/midterm.md).
 - **11th and 13th March**: Demo showcase, final lab oral.
