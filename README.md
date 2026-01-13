@@ -93,7 +93,7 @@ You will also be awarded additional marks for close-to-metal implementations.
 * https://discuss.pynq.io/
 * https://www.chipverify.com/tutorials/systemverilog
 * https://platform.openai.com/docs/api-reference/introduction
-
+* https://pynq.readthedocs.io/en/latest/getting_started.html
 
 --- 
 
