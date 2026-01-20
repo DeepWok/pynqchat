@@ -13,9 +13,12 @@ You should demonstrate to the marking team that:
 * Your system works
 * What is the end-to-end latency of your system (from speak-llm-listen)?
 * What improvements have you made to improve this end-to-end latency performance?
-* What evaluation have you done to evaluate your improvements?
+* What evaluation have you done to evaluate your improvements (logbook evidence needed)?
+* What optional tasks have you done, and how did they improve your performance/functionality (logbook evidence needed)?
 
-These questions might include: 
+This contributes 50% of the marks, partially working system would be mark capped at 20%.
+
+You will also be assessed by answering technical questions, these questions might include: 
 
 * Understanding of an FPGA device. 
 * Understanding of the FPGA design process  
@@ -32,3 +35,5 @@ The answer to each question will be assessed as:
 - Partial answer : 1 marks 
 - Satisfactory answer : 2 mark 
 - Excellent answer : 3 marks 
+ 
+This contributes the other 50% of the marks.
