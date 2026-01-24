@@ -202,7 +202,9 @@ Now that we have a frontend module that converts incoming PDM data to PCM data, 
 
 The BaseOverlay's `audio_direct` module uses an AXI4 peripheral controlled by MMIO registers.
 
-Since we're converting the PDM input from the microphone to PCM, we must modify the RX (receive) FIFO to accept 32-bit inputs instead of 1-bit inputs. PCM uses 32 bits while PDM uses 1 bit in the current design. At this stage, we won't modify the TX (transmit) FIFO.
+Since we're converting the PDM input from the microphone to PCM, we must modify the RX (receive) FIFO to accept 32-bit inputs instead of 1-bit inputs. PCM uses 32-bits while PDM uses 1-bit in the current design. At this stage, we won't modify the Tx (transmit) side.
+
+> The Tx-side "serializer" expects 16-bit inputs from the Tx FIFO and outputs 1-bit outputs for PWM playback. Hence, you should generate one 32-bit wide FIFO and one 16-bit wide FIFO. The image below is an older screenshot which incorrectly shows both the Tx-side FIFO and the Rx-side FIFO using the same generated IP.
 
 ![](/images/lab2-audio-direct-modified.jpg)
 

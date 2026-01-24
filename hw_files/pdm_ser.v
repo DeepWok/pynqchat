@@ -10,7 +10,7 @@ module pdm_ser #(
     input wire en_i,
 
     output reg done_o,
-    input wire [31:0] data_i,
+    input wire [C_NR_OF_BITS-1:0] data_i,
 
     // PWM
     output wire pwm_audio_o,
