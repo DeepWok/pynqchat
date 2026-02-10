@@ -6,7 +6,7 @@ The aim is to assess the understanding and the degree of completion of the labs 
 
 The assessment will take place during the midterm week. The orals will take place with either the module lecturer or a GTA, and a moderation will take place across the groups.  
 
-Each group will have a 20-minute oral slot, of which 15 minutes are dedicated to questions about all the various things you have seen in the lab, where the last 5 minutes will be used for feedback and discussion. 
+Each group will have a 15-minute oral slot, which is dedicated to questions about all the various things you have seen in the lab. We will have a separate bookable session to discuss on later final projects with module leaders. 
 
 You should demonstrate to the marking team that:
 
