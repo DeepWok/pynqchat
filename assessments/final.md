@@ -4,7 +4,7 @@
 
 ### Objective 
 
-The overall goal is to develop an IoT system with multiple nodes that process data captured by an accelerometer and can interact with a cloud server in order for information to be exchanged. The aim is to bring together knowledge that you have acquired in the Autumn term and enhance your knowledge and practical skills through the development of such system. 
+The overall goal is to develop an IoT system with multiple nodes that process data captured by sensor data (eg. the microphone and can be extended to others) and can interact with a cloud server in order for information to be exchanged. The aim is to bring together knowledge that you have acquired in the Autumn term and enhance your knowledge and practical skills through the development of such system. 
 
 The nodes of the system consist of FPGA boards, where the server will be hosted on the cloud.  
 
