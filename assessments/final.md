@@ -15,7 +15,7 @@ The minimum functional requirements for your system are:
 - Communicating information from the server back to the nodes in way that the local processing can be impacted.  
 - Use of at least two nodes and a demonstration of at least two nodes can both receive and transmit information
  
-The project is open-ended, and it is your decision the detailed functionality of the system. A good approach is to start designing and developing a system for which it is easy to meet the above functional requirements, but also it has space for expansion. 
+The project is open-ended, and it is your decision the detailed functionality of the system. A good approach is to start designing and developing a system for which it is easy to meet the above functional requirements, but also it has space for expansion. If you need monetory support on purchasing additional hardware, this is normally okay but has to be communicated beforehand (normally 20-40 GBP budget). 
 
 ### Coursework deliverables 
 
