@@ -8,7 +8,7 @@
   - we will announce the final team formation on the **15th Jan AM** before the lab
   - we will try our best to respect people's team formation, but sometimes would also have to break teams to make sure numbers are correctly distributed.
 - **11th Feb**: Mid-term lab oral (20%), Q&As as a group, for contents in all the labs. You can find the examination info [here](assessments/midterm.md).
-- **12th March**: Demo showcase, final lab oral.
+- **~~12th March~~ 19th March (Extended deadline)**: Demo showcase, final lab oral.
 - **23rd March**: Final Report (80%, this is aggregated and evaluated also based on the demo quality and final lab oral), you can find how to submit the required report, code and video in [here](assessments/final.md).
 
 ## Arrangements
