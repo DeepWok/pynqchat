@@ -31,7 +31,7 @@ Your coursework deliverables consist of the following:
     - At least one diagram or flow-chart describing your testing flow or approach. 
     - Resources utilised on the device, especially on the hardware resources.
 
-2. Peer feedback: individual submission by each group member to provide peer feedback on your team members, submitted via Microsoft Forms. 
+2. Peer feedback: individual submission by each group member to provide peer feedback on your team members, submitted via Microsoft Forms, which would be normally sent a week after the final project deadline. 
  
 3. Your design (FPGA Hardware, only necessary), and software, in a Github Repository with clear instructions on how to run your code, the github link should be provided in the report. Do not submit code.
  
@@ -50,8 +50,11 @@ The coursework mark comes from the following components:
 
 ### Submission 
 
-Submission will be through blackboard.  
+Submission will be through emailing a.zhao@imperial.ac.uk, the email title should be infomation_processing_groupid, and the file should be named as `information_processing_groupid.pdf`. For example, if your project group id is 3, the email title would be information_process_group3, and the pdf should be named as `information_processing_group3.pdf`. 
 
-It is up to you to choose/manage source code control through any tool or technology you want. You can get access to github pro through the github education programme, but you can use any other service your team prefers - if you want to work out of SharePoint, this is also fine.
+The pdf should contain
+- A link to your youtube video
+- A link to your github repository (which has your code)
+- The email should only contain the pdf, please do not submit any .zip file with your code or any artifacts.
 
 Note that the Github repository should not contain any code for the labs, it should only contain the code for your team project, failure in doing so would result a reduction in marks.
