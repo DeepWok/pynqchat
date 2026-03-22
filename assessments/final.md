@@ -53,6 +53,7 @@ The coursework mark comes from the following components:
 Submission will be through emailing a.zhao@imperial.ac.uk, the email title should be infomation_processing_groupid, and the file should be named as `information_processing_groupid.pdf`. For example, if your project group id is 3, the email title would be information_process_group3, and the pdf should be named as `information_processing_group3.pdf`. 
 
 The pdf should contain
+- One email per group - only one of the group members need to send the email while they would need to cc' all the memebers in the email.
 - A link to your youtube video
 - A link to your github repository (which has your code)
 - The email should only contain the pdf, please do not submit any .zip file with your code or any artifacts.
